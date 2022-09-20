@@ -1,0 +1,89 @@
+.product-card
+  border: 2px #414833 solid
+  display: flex
+  flex-direction: column
+  position: relative
+
+  &:hover
+
+    .product-card__link
+      opacity: 1
+
+.product-card__img
+  position: relative
+
+  img
+    display: block
+    object-fit: cover
+    height: 175px
+    width: 100%
+
+.product-card__link
+  display: block
+  background: #C5E384
+  position: absolute
+  font-size: 20px
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  opacity: 0
+  padding: 4px 8px 5px
+  transition: 0.3s
+  height: auto
+  width: auto
+
+.product-card__name
+  font-size: 18px
+  font-weight: 700
+  color: #414833
+
+.product-card__bottom
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  padding: 14px 8px 8px
+
+.product-card__count
+  display: flex
+  margin-top: 7px
+
+  div
+    margin-right: 5px
+
+.product-card__brand
+  display: flex
+  margin-top: 7px
+
+  div
+    margin-right: 5px
+
+.product-card__color
+  display: flex
+  margin-top: 7px
+
+  div
+    margin-right: 5px
+
+.product-card__year
+  display: flex
+  margin-top: 7px
+
+  div
+    margin-right: 5px
+
+.product-card__cameras
+  display: flex
+  margin-top: 7px
+
+  div
+    margin-right: 5px
+
+.product-card__status
+  font-size: 20px
+  background: #C5E384
+  padding: 4px 8px 5px
+  position: absolute
+  top: -2px
+  left: -2px
+  height: auto
+  width: auto
