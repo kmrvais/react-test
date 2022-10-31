@@ -6,27 +6,29 @@ type Props = {
     items: {
        id: string;
        title: string;
+       type: string;
     }[]
 }
 
 const FormControl:React.FC<Props> = ({title, items}) => {
     // @ts-ignore
-    const [catalogState, dispatch] = useContext(CatalogContext);
-    const filtersList = catalogState.active_filters;
-    console.log('filtersList', filtersList)
+    const [CatalogState, dispatch] = useContext(CatalogContext);
+    const activeFilters = CatalogState.active_filters;
+    const { brands, colors, quantity_of_cameras: quantityOfCameras } = activeFilters
     return (
         <div className="form-filter__control">
             <div className="form-filter__title">{title}</div>
             <div className="form-filter__items">
                 {
                     items.map((item) => {
-                        const inFiltersList = filtersList.includes(item.title);
+                        const inFiltersList = brands.includes(item.title) || colors.includes(item.title) || quantityOfCameras.includes(item.title);
                         const activeClass = inFiltersList ? "form-filter__control-item_active" : "";
                         return (
                             <button key={item.id}
                                     className={`form-filter__control-item ${activeClass}`}
                                     type="button"
-                                    onClick={() => dispatch({type: "FILTER_SELECTION", payload: item.title})}>
+                                    onClick={() => dispatch({type: "FILTER_SELECTION",
+                                                            payload: {title: item.title, type: item.type}})}>
                                 {item.title}
                             </button>
                         )

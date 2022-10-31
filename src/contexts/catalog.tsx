@@ -1,6 +1,43 @@
 import {createContext, useReducer} from "react";
+import filterSlider from "../components/filter-slider";
+import {Product} from "../types";
 
-const initialState = {
+type Filter = {
+    id: number;
+    name: string;
+    items: {
+        id: number;
+        title: string;
+        type: string;
+    }[]
+}
+
+type FilterSlider = {
+    id: number;
+    name: string;
+    max: number;
+    min: number;
+    type: string;
+}
+
+type State = {
+    filters: Filter[],
+    filters_slider: FilterSlider[];
+    product_cards: Product[],
+    basket: number[],
+    active_filters: {
+        brands: string[],
+        colors: string[],
+        quantity_of_cameras: string[],
+    }
+}
+
+type Action = {
+    type: string;
+    payload: string | number | { type: string, title: string };
+}
+
+const initialState: State = {
     filters: [
         {
             id: 1,
@@ -8,11 +45,13 @@ const initialState = {
             items: [
                 {
                     "id": 1,
-                    "title": "Apple"
+                    "title": "Apple",
+                    "type": "brands"
                 },
                 {
                     "id": 2,
-                    "title": "Xiaomi"
+                    "title": "Xiaomi",
+                    "type": "brands"
                 }
             ]
         },
@@ -22,19 +61,23 @@ const initialState = {
             items: [
                 {
                     "id": 1,
-                    "title": "red"
+                    "title": "red",
+                    "type": "colors"
                 },
                 {
                     "id": 2,
-                    "title": "pink"
+                    "title": "pink",
+                    "type": "colors"
                 },
                 {
                     "id": 3,
-                    "title": "black"
+                    "title": "black",
+                    "type": "colors"
                 },
                 {
                     "id": 4,
-                    "title": "white"
+                    "title": "white",
+                    "type": "colors"
                 }
             ]
         },
@@ -43,16 +86,19 @@ const initialState = {
             name: 'Количество камер',
             items: [
                 {
-                    "id": "1",
-                    "title": "1"
+                    "id": 1,
+                    "title": "1",
+                    "type": "quantity_of_cameras"
                 },
                 {
-                    "id": "2",
-                    "title": "2"
+                    "id": 2,
+                    "title": "2",
+                    "type": "quantity_of_cameras"
                 },
                 {
-                    "id": "3",
-                    "title": "3"
+                    "id": 3,
+                    "title": "3",
+                    "type": "quantity_of_cameras"
                 }
             ]
         },
@@ -142,30 +188,62 @@ const initialState = {
         }
     ],
     basket: [],
-    active_filters: [],
+    active_filters: {
+        brands: [],
+        colors: [],
+        quantity_of_cameras: [],
+    }
 }
 
-const reducer = (state: object, action: object) => {
+localStorage.setItem('filters', JSON.stringify(initialState.active_filters));
+
+const reducer = (state: State, action: Action) => {
     switch (action.type) {
         case "BASKET_TOGGLE_ITEM": {
-
-            if (state.basket.includes(action.payload)) {
+            if (state.basket.includes(+action.payload)) {
+                let basketNew = state.basket.filter((id) => {
+                    return id !== action.payload;
+                })
+                localStorage.setItem('basket', JSON.stringify(basketNew));
                 return {
                     ...state,
-                    basket: state.basket.filter((id) => {
-                        return id !== action.payload;
-                    })
+                    basket: basketNew
                 }
             } else {
+                let basketNew = [...state.basket, action.payload]
+                localStorage.setItem('basket', JSON.stringify(basketNew));
                 return {
                     ...state,
-                    basket: [...state.basket, action.payload]
+                    basket: basketNew
                 }
             }
         }
         case "FILTER_SELECTION": {
-            console.log('action.payload', action.payload)
-            if (state.active_filters.includes(action.payload)) {
+            const filterItem = action.payload;
+            const activeFilters = state.active_filters;
+            let newValue;
+
+            for (let key in activeFilters) {
+                if (key === filterItem.type) {
+                    if (activeFilters[key].includes(filterItem.title)) {
+                        newValue = activeFilters[key].filter((title) => {
+                            return title !== filterItem.title;
+                        })
+                    } else {
+                        newValue = [...activeFilters[key], filterItem.title]
+                    }
+
+                    return {
+                        ...state,
+                        active_filters: {
+                            ...state.active_filters,
+                            [key]: newValue
+                        }
+                    }
+                }
+            }
+
+            /*if (state.active_filters.includes(action.payload)) {
                 return {
                     ...state,
                     active_filters: state.active_filters.filter((title) => {
@@ -177,7 +255,7 @@ const reducer = (state: object, action: object) => {
                     ...state,
                     active_filters: [...state.active_filters, action.payload]
                 }
-            }
+            }*/
         }
         default: {
             return state

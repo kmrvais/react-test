@@ -3,7 +3,7 @@ import Basket from "../basket";
 import {CatalogContext} from "../../contexts/catalog";
 
 const Header = () => {
-    const [CatalogState, dispatch] = useContext(CatalogContext);
+    const [CatalogState] = useContext(CatalogContext);
     let quantity = CatalogState.basket.length;
     console.log('quantity', quantity)
     return (
