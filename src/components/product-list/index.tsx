@@ -5,7 +5,6 @@ import {Product} from "../../types";
 import ProductCard from "../product-card";
 
 const ProductList = () => {
-    // @ts-ignore
     const [CatalogState, dispatch] = useContext(CatalogContext);
     let productCards = CatalogState.product_cards;
     const basketList = CatalogState.basket;
@@ -38,6 +37,7 @@ const ProductList = () => {
                         <ProductCard
                             key={card.id}
                             id={card.id}
+                            img={card.img}
                             name={card.name}
                             quantity={card.quantity}
                             brand={card.brand}

@@ -5,10 +5,9 @@ import FormControl from "../form-control";
 //import FilterSlider from "../filter-slider";
 
 const FormFilter = () => {
-    // @ts-ignore
-    const [CatalogState, dispatch] = useContext(CatalogContext);
+    const [CatalogState] = useContext(CatalogContext);
     const filters = CatalogState.filters;
-    const filtersSlider = CatalogState.filters_slider;
+    // const filtersSlider = CatalogState.filters_slider;
 
     return (
         <form className="form-filter">

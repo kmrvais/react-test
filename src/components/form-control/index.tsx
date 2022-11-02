@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {CatalogContext} from "../../contexts/catalog";
+import {Action, CatalogContext, State} from "../../contexts/catalog";
 
 type Props = {
     title: string;
@@ -11,7 +11,6 @@ type Props = {
 }
 
 const FormControl:React.FC<Props> = ({title, items}) => {
-    // @ts-ignore
     const [CatalogState, dispatch] = useContext(CatalogContext);
     const activeFilters = CatalogState.active_filters;
     const { brands, colors, quantity_of_cameras: quantityOfCameras } = activeFilters

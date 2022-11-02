@@ -1,7 +1,12 @@
 import React from "react";
+import {Product} from "../../types";
 
-// @ts-ignore
-const ProductCard = ({id, name, quantity, brand, color, year, cameraQuantity, onClickCard, inBasket}) => {
+type Props = Product & {
+    onClickCard: (id: number) => void;
+    inBasket: boolean;
+}
+
+const ProductCard:React.FC<Props> = ({id, name, quantity, brand, color, year, cameraQuantity, onClickCard, inBasket}) => {
     const buttonText = inBasket ? 'Удалить из корзины' : 'Добавить в корзину';
     return (
         <div className="product-card" data-id={id}>

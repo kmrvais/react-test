@@ -19,7 +19,7 @@ type FilterSlider = {
     type: string;
 }
 
-type State = {
+export type State = {
     filters: Filter[],
     filters_slider: FilterSlider[];
     product_cards: Product[],
@@ -31,7 +31,7 @@ type State = {
     }
 }
 
-type Action = {
+export type Action = {
     type: string;
     payload: string | number | { type: string, title: string };
 }
@@ -125,7 +125,6 @@ const initialState: State = {
             "name": "iPhone",
             "quantity": 12,
             "brand": "Apple",
-            "isPopular": true,
             "color": "pink",
             "year": 2010,
             "cameraQuantity": "2"
@@ -136,7 +135,6 @@ const initialState: State = {
             "name": "iPhone10",
             "quantity": 36,
             "brand": "Apple",
-            "isPopular": true,
             "color": "black",
             "year": 2019,
             "cameraQuantity": "3"
@@ -147,7 +145,6 @@ const initialState: State = {
             "name": "iPhone11",
             "quantity": 2,
             "brand": "Apple",
-            "isPopular": true,
             "color": "red",
             "year": 2019,
             "cameraQuantity": "3"
@@ -158,7 +155,6 @@ const initialState: State = {
             "name": "iPhone11",
             "quantity": 45,
             "brand": "Apple",
-            "isPopular": true,
             "color": "pink",
             "year": 2012,
             "cameraQuantity": "3"
@@ -169,7 +165,6 @@ const initialState: State = {
             "name": "iPhone11",
             "quantity": 5,
             "brand": "Apple",
-            "isPopular": true,
             "color": "red",
             "year": 2019,
             "cameraQuantity": "3"
@@ -180,7 +175,6 @@ const initialState: State = {
             "name": "iPhone11",
             "quantity": 67,
             "brand": "Xiaomi",
-            "isPopular": true,
             "color": "red",
             "year": 2019,
             "cameraQuantity": "1"
@@ -252,7 +246,8 @@ const reducer = (state: State, action: Action): State => {
     }
 }
 
-export const CatalogContext = createContext<[State, React.Dispatch<Action>] | null>(null);
+// @ts-ignore
+export const CatalogContext = createContext<[State, React.Dispatch<Action>]>();
 
 export const CatalogProvider = ({children}: {children: React.ReactNode}) => {
     const value = useReducer(reducer, initialState);

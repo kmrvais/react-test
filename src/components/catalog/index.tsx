@@ -1,13 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import Header from "../header";
 import ProductList from "../product-list";
 import FormFilter from "../form-filter";
-import {CatalogContext} from "../../contexts/catalog";
 
 const Catalog = () => {
-    // @ts-ignore
-    const [catalogState, dispatch] = useContext(CatalogContext);
-
     return (
         <div className="container">
             <Header/>
