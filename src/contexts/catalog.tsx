@@ -1,5 +1,4 @@
-import {createContext, useReducer} from "react";
-import filterSlider from "../components/filter-slider";
+import React, {createContext, useReducer} from "react";
 import {Product} from "../types";
 
 type Filter = {
@@ -197,7 +196,7 @@ const initialState: State = {
 
 localStorage.setItem('filters', JSON.stringify(initialState.active_filters));
 
-const reducer = (state: State, action: Action) => {
+const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case "BASKET_TOGGLE_ITEM": {
             if (state.basket.includes(+action.payload)) {
@@ -210,7 +209,7 @@ const reducer = (state: State, action: Action) => {
                     basket: basketNew
                 }
             } else {
-                let basketNew = [...state.basket, action.payload]
+                let basketNew = [...state.basket, +action.payload]
                 localStorage.setItem('basket', JSON.stringify(basketNew));
                 return {
                     ...state,
@@ -219,18 +218,20 @@ const reducer = (state: State, action: Action) => {
             }
         }
         case "FILTER_SELECTION": {
-            const filterItem = action.payload;
-            const activeFilters = state.active_filters;
+            const filterItem = action.payload as { type: string, title: string };
+            const activeFilters = state.active_filters as { [key: string]: string[] };
             let newValue;
 
             for (let key in activeFilters) {
                 if (key === filterItem.type) {
-                    if (activeFilters[key].includes(filterItem.title)) {
-                        newValue = activeFilters[key].filter((title) => {
+                    const currentFilter = activeFilters[key];
+
+                    if (currentFilter.includes(filterItem.title)) {
+                        newValue = currentFilter.filter((title: string) => {
                             return title !== filterItem.title;
                         })
                     } else {
-                        newValue = [...activeFilters[key], filterItem.title]
+                        newValue = [...currentFilter, filterItem.title]
                     }
 
                     return {
@@ -243,19 +244,7 @@ const reducer = (state: State, action: Action) => {
                 }
             }
 
-            /*if (state.active_filters.includes(action.payload)) {
-                return {
-                    ...state,
-                    active_filters: state.active_filters.filter((title) => {
-                        return title !== action.payload;
-                    })
-                }
-            } else {
-                return {
-                    ...state,
-                    active_filters: [...state.active_filters, action.payload]
-                }
-            }*/
+            return state;
         }
         default: {
             return state
@@ -263,15 +252,12 @@ const reducer = (state: State, action: Action) => {
     }
 }
 
-// @ts-ignore
-export const CatalogContext = createContext();
+export const CatalogContext = createContext<[State, React.Dispatch<Action>] | null>(null);
 
-// @ts-ignore
-export const CatalogProvider = ({children}) => {
+export const CatalogProvider = ({children}: {children: React.ReactNode}) => {
     const value = useReducer(reducer, initialState);
 
     return (
-        // @ts-ignore
         <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>
     )
 }
