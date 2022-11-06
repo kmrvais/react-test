@@ -188,28 +188,27 @@ const initialState: State = {
     }
 }
 
-localStorage.setItem('filters', JSON.stringify(initialState.active_filters));
-
 const reducer = (state: State, action: Action): State => {
+    let newState = state;
+
     switch (action.type) {
         case "BASKET_TOGGLE_ITEM": {
             if (state.basket.includes(+action.payload)) {
                 let basketNew = state.basket.filter((id) => {
                     return id !== action.payload;
                 })
-                localStorage.setItem('basket', JSON.stringify(basketNew));
-                return {
+                newState = {
                     ...state,
                     basket: basketNew
                 }
             } else {
                 let basketNew = [...state.basket, +action.payload]
-                localStorage.setItem('basket', JSON.stringify(basketNew));
-                return {
+                newState = {
                     ...state,
                     basket: basketNew
                 }
             }
+            break;
         }
         case "FILTER_SELECTION": {
             const filterItem = action.payload as { type: string, title: string };
@@ -228,7 +227,7 @@ const reducer = (state: State, action: Action): State => {
                         newValue = [...currentFilter, filterItem.title]
                     }
 
-                    return {
+                    newState = {
                         ...state,
                         active_filters: {
                             ...state.active_filters,
@@ -238,12 +237,11 @@ const reducer = (state: State, action: Action): State => {
                 }
             }
 
-            return state;
-        }
-        default: {
-            return state
+            break;
         }
     }
+
+    return newState
 }
 
 // @ts-ignore
