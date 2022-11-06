@@ -1,5 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {Product} from "../types";
+import {setLocalStorage} from "../helpers/local-storage";
 
 type Filter = {
     id: number;
@@ -240,6 +241,9 @@ const reducer = (state: State, action: Action): State => {
             break;
         }
     }
+
+    const {basket, active_filters} = newState;
+    setLocalStorage({basket, active_filters});
 
     return newState
 }
