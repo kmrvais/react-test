@@ -1,6 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {Product} from "../types";
-import {setLocalStorage} from "../helpers/local-storage";
+import {getLocalStorage, setLocalStorage} from "../helpers/local-storage";
 
 type Filter = {
     id: number;
@@ -252,7 +252,12 @@ const reducer = (state: State, action: Action): State => {
 export const CatalogContext = createContext<[State, React.Dispatch<Action>]>();
 
 export const CatalogProvider = ({children}: {children: React.ReactNode}) => {
-    const value = useReducer(reducer, initialState);
+    const {basket, active_filters} = getLocalStorage()
+    const value = useReducer(reducer, {
+        ...initialState,
+        basket,
+        active_filters
+    });
 
     return (
         <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>
